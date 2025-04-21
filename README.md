@@ -38,7 +38,8 @@ Each gesture results in the Arduino sending precise signals to the motors, allow
 
 ## 📂 Files Included
 - `Mouse.txt` – Arduino source code
-- `circuit_diagram.png` –  Circuit setup image
+- `Architecture Diagram for Hand Gesture.png` –  Architecture Diagram for Hand Gesture
+- `IoT based Gesture-Controlled Mouse real time.png` – IoT based Gesture-Controlled Mouse real time
 - `README.md` – Project overview and instructions
 
 ## ⚙️ How It Works
