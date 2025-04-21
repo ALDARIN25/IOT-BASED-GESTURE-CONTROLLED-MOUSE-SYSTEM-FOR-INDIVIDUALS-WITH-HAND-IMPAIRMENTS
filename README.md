@@ -37,8 +37,8 @@ Each gesture results in the Arduino sending precise signals to the motors, allow
 
 
 ## 📂 Files Included
-- `gesture_mouse.ino` – Arduino source code
-- `circuit_diagram.png` – (Optional) Circuit setup image
+- `Mouse.txt` – Arduino source code
+- `circuit_diagram.png` –  Circuit setup image
 - `README.md` – Project overview and instructions
 
 ## ⚙️ How It Works
