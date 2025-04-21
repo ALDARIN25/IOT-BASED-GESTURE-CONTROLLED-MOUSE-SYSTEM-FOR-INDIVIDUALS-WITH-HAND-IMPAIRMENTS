@@ -1,0 +1,154 @@
+//Gesture controlled Mouse for disabled
+#include <Servo.h>
+Servo servo1;
+Servo servo2;
+#define x A0 // x_out pin of Accelerometer
+#define y A1 // y_out pin of Accelerometer
+#define z A2 // z_out pin of Accelerometer
+#define m11 7    // rear motor
+#define m12 6
+#define m21 5    // front motor
+#define m22 4
+/*variables*/
+int xsample=0;
+int ysample=0;
+int zsample=0;
+/*Macros*/
+#define samples 50
+#define maxVal 30 // max change limit
+#define minVal -20 // min change limit
+void forward()
+{
+   digitalWrite(m11, LOW);
+   digitalWrite(m12, HIGH);
+   digitalWrite(m21, LOW);
+   digitalWrite(m22, HIGH);
+}
+void backward()
+{
+   digitalWrite(m11, HIGH);
+   digitalWrite(m12, LOW);
+   digitalWrite(m21, HIGH);
+   digitalWrite(m22, LOW); 
+}
+void left()
+{
+   digitalWrite(m11, HIGH);
+   digitalWrite(m12, LOW);
+   //delay(100);
+   digitalWrite(m21, LOW);
+   digitalWrite(m22, HIGH);
+}
+void right()
+{
+   digitalWrite(m11, LOW);
+   digitalWrite(m12, HIGH);
+   //delay(100);
+   digitalWrite(m21, HIGH);
+   digitalWrite(m22, LOW);
+}
+void Stop()
+{
+   digitalWrite(m11, LOW);
+   digitalWrite(m12, LOW);
+   digitalWrite(m21, LOW);
+   digitalWrite(m22, LOW);
+}
+
+void setup()
+{
+  pinMode(m11, OUTPUT);
+  pinMode(m12, OUTPUT);
+  pinMode(m21, OUTPUT);
+  pinMode(m22, OUTPUT);
+Serial.begin(9600); // initializing serial
+for(int i=0;i<samples;i++) // taking samples for calibration
+{
+xsample+=analogRead(x);
+ysample+=analogRead(y);
+zsample+=analogRead(z);
+}
+
+xsample/=samples; // taking avg for x
+ysample/=samples; // taking avg for y
+zsample/=samples; // taking avg for z
+ servo1.attach(2);
+ servo2.attach(9);
+ servo1.write(0); 
+ servo2.write(30); 
+}
+
+void loop()
+{
+int value1=analogRead(x); // reading x out
+int value2=analogRead(y); //reading y out
+int value3=analogRead(z); //reading z out
+
+int xValue=xsample-value1; // finding change in x
+int yValue=ysample-value2; // finding change in y
+int zValue=zsample-value3; // finding change in z
+
+/*displying change in x,y and z axis values over lcd*/
+Serial.println("X");
+Serial.println(xValue);
+Serial.println("Y");
+Serial.println(yValue);
+Serial.println("Z");
+Serial.println(zValue);
+delay(100);
+if((xValue <= -10)&&(yValue >= 0))
+{
+//forward();
+//Serial.println("Forward");
+//delay(100);
+Serial.println("Right Click");
+  servo1.write(30);
+  delay(200);
+  servo1.write(0);
+  delay(1000); 
+}
+else if(xValue >= maxVal )
+{
+backward();
+Serial.println("Reverse");
+delay(100);
+}
+else if((yValue < minVal)&&((xValue >= -5)&&(xValue <= 5)))
+{
+left();
+Serial.println("Left");
+delay(100);
+}
+else if(yValue > maxVal)
+{
+right();
+Serial.println("Right");
+delay(100);
+}
+else if((xValue <= -20)&&(xValue >= -30))
+{
+  //Serial.println("Right Click");
+  //servo1.write(30);
+  //delay(200);
+  //servo1.write(0);
+  //delay(1000); 
+forward();
+Serial.println("Forward");
+delay(100);
+}
+else if((xValue <= -10)&&(yValue <= -10))
+{
+  Serial.println("Left Click");
+  servo2.write(0);
+  delay(200);
+  servo2.write(30);
+  delay(1000); 
+}
+else if(((xValue <= 10) || (xValue >= -10)) && ((yValue <= 10) || (yValue >= -10)) && ((zValue <= 10) || (zValue >= -10)))
+{
+Stop();
+Serial.println("Stop");
+delay(100);
+}
+//delay(1000);
+}
