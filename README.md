@@ -42,6 +42,27 @@ Each gesture results in the Arduino sending precise signals to the motors, allow
 - `IoT based Gesture-Controlled Mouse real time.png` – IoT based Gesture-Controlled Mouse real time
 - `README.md` – Project overview and instructions
 
+## 📊 Response Time Analysis
+
+Response time is a critical performance metric in gesture-based systems, as it directly influences the user experience. In the context of this system, response time refers to the delay between a user's gesture and the corresponding action being executed on the computer screen. Efficient response times contribute to a natural and uninterrupted interaction, thereby enhancing usability.
+
+The system exhibited a fast response time of approximately **0.1 seconds** for general cursor movements—such as moving forward, backward, left, right, or stopping. These gestures corresponded to defined threshold values from the gyroscope’s **X** and **Y** axes, and were recognized and processed almost instantaneously. 
+
+For click actions, which involved activating the servo motors, the response time was slightly longer—approximately **0.2 seconds** for initiating the click, and **1.0 second** for resetting the servo to its default position. This additional time accounts for the physical actuation of the servo and ensures proper positioning before accepting the next command.
+
+### 📈 **Action and Sensor Values for Motor Control**
+
+| Action         | Sensor Values                                | Description                                                                                          | Response Time (sec)        |
+|----------------|----------------------------------------------|------------------------------------------------------------------------------------------------------|----------------------------|
+| **Forward**     | xValue <= -20                               | Moves the motors forward when the x-axis tilt exceeds -20 units.                                     | 0.1                        |
+| **Backward**    | xValue >= 30                                | Moves the motors backward when the x-axis tilt exceeds 30 units.                                     | 0.1                        |
+| **Left**        | yValue < -20                                | Turns left when the y-axis tilt is less than -20 units and x-axis tilt is within -5 to 5 units.      | 0.1                        |
+| **Right**       | yValue > 30                                 | Turns right when the y-axis tilt exceeds 30 units.                                                   | 0.1                        |
+| **Left Click**  | xValue <= -10 and yValue <= -10             | Simulates a left-click by controlling the second servo when x and y-axis tilt exceed -10 units.      | 0.2 (click), 1.0 (reset)   |
+| **Right Click** | xValue <= -10 and yValue >= 0               | Simulates a right-click by controlling the first servo when x-axis tilt is <= -10 and y is positive. | 0.2 (click), 1.0 (reset)   |
+| **Stop**        | xValue, yValue, and zValue within -10 to 10 | Stops all motor actions when the tilt in all axes is minimal.                                        | 0.1                        |
+
+
 ## ⚙️ How It Works
 1. The MPU6050 gyroscope tracks user movements.
 2. The Arduino processes the data and matches gestures using the DTW algorithm.
